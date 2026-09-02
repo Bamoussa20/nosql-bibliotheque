@@ -1,0 +1,66 @@
+{
+  "_comment": "Ce fichier est une représentation lisible du jeu de données inséré par src/init_database.py. Les données réellement insérées en base utilisent des ObjectId générés dynamiquement par MongoDB ; ce fichier sert de référence pédagogique et n'est pas importé tel quel par le script Python.",
+
+  "authors": [
+    { "nom": "George Orwell", "bio": "Écrivain et journaliste britannique, connu pour ses œuvres dystopiques et son engagement politique.", "nationalite": "Britannique" },
+    { "nom": "Robert C. Martin", "bio": "Ingénieur logiciel américain, auteur de référence sur les bonnes pratiques de développement.", "nationalite": "Américaine" },
+    { "nom": "Isaac Asimov", "bio": "Écrivain et biochimiste américain, figure majeure de la science-fiction du XXe siècle.", "nationalite": "Américaine" },
+    { "nom": "Yuval Noah Harari", "bio": "Historien et essayiste israélien, spécialiste de l'histoire mondiale et de la prospective.", "nationalite": "Israélienne" }
+  ],
+
+  "users": [
+    { "nom": "Amadou Diallo", "email": "amadou.diallo@example.com" },
+    { "nom": "Fatoumata Camara", "email": "fatoumata.camara@example.com" },
+    { "nom": "Mamadou Bah", "email": "mamadou.bah@example.com" }
+  ],
+
+  "books": [
+    {
+      "titre": "1984",
+      "auteurs": ["George Orwell"],
+      "date_publication": "1949-06-08",
+      "tags": ["Dystopie", "Science-fiction", "Politique"],
+      "resume": "Dans un monde totalitaire sous surveillance permanente, Winston Smith tente de préserver sa liberté de pensée face au régime de Big Brother.",
+      "disponible": true
+    },
+    {
+      "titre": "Clean Code",
+      "auteurs": ["Robert C. Martin"],
+      "date_publication": "2008-08-01",
+      "tags": ["Génie logiciel"],
+      "resume": "Un guide de référence sur l'écriture d'un code lisible et maintenable.",
+      "disponible": false
+    },
+    {
+      "titre": "Fondation",
+      "auteurs": ["Isaac Asimov"],
+      "date_publication": "1951-05-01",
+      "tags": ["Science-fiction", "Space opera", "Roman"],
+      "resume": "L'effondrement annoncé d'un empire galactique donne naissance à un projet scientifique destiné à réduire des millénaires de chaos à un seul siècle.",
+      "disponible": true
+    },
+    {
+      "titre": "Sapiens : Une brève histoire de l'humanité",
+      "auteurs": ["Yuval Noah Harari"],
+      "date_publication": "2011-01-01",
+      "tags": [],
+      "resume": "Une traversée de l'histoire humaine, de l'apparition de l'Homo sapiens à la révolution cognitive, agricole puis scientifique.",
+      "disponible": true
+    },
+    {
+      "titre": "Le Guide du développeur pragmatique",
+      "auteurs": ["Robert C. Martin", "George Orwell"],
+      "date_publication": "2019-03-15",
+      "tags": ["Génie logiciel", "Méthodologie"],
+      "resume": "Compilation de bonnes pratiques transversales pour le développement logiciel.",
+      "disponible": false
+    }
+  ],
+
+  "loans": [
+    { "utilisateur": "Amadou Diallo", "livre": "1984", "statut": "en_cours", "date_retour": null },
+    { "utilisateur": "Fatoumata Camara", "livre": "Clean Code", "statut": "en_cours", "date_retour": null },
+    { "utilisateur": "Mamadou Bah", "livre": "Fondation", "statut": "rendu", "date_retour": "date effective renseignée" },
+    { "utilisateur": "Amadou Diallo", "livre": "Le Guide du développeur pragmatique", "statut": "en_cours", "date_retour": null }
+  ]
+}

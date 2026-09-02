@@ -1,0 +1,95 @@
+{
+  "database": "bibliotheque_nosql",
+  "description": "Schéma documentaire de la bibliothèque numérique. MongoDB n'impose pas de schéma strict au niveau du moteur ; ce document décrit la structure conventionnelle appliquée par l'application.",
+  "collections": {
+    "authors": {
+      "description": "Un document par auteur. Collection séparée car un auteur peut être associé à plusieurs livres : la dupliquer dans chaque livre entraînerait une redondance et des risques d'incohérence en cas de mise à jour (ex : correction d'une biographie).",
+      "fields": {
+        "_id": { "type": "ObjectId", "description": "Identifiant unique généré par MongoDB." },
+        "nom": { "type": "string", "description": "Nom complet de l'auteur." },
+        "bio": { "type": "string", "description": "Courte biographie de l'auteur." },
+        "nationalite": { "type": "string", "description": "Nationalité de l'auteur." }
+      },
+      "example": {
+        "_id": "665f1a2b3c4d5e6f7a8b9c01",
+        "nom": "George Orwell",
+        "bio": "Écrivain et journaliste britannique, connu pour ses œuvres dystopiques.",
+        "nationalite": "Britannique"
+      }
+    },
+
+    "books": {
+      "description": "Un document par livre. Les auteurs sont référencés via un sous-document 'extended reference' (auteur_id + nom) : cela évite une jointure ($lookup) systématique pour un simple affichage de liste, tout en conservant l'_id pour retrouver la fiche complète de l'auteur si besoin.",
+      "fields": {
+        "_id": { "type": "ObjectId", "description": "Identifiant unique généré par MongoDB." },
+        "titre": { "type": "string", "description": "Titre du livre. Indexé (idx_titre)." },
+        "auteurs": {
+          "type": "array<object>",
+          "description": "Liste des auteurs du livre (référence étendue, embedded reference).",
+          "items": {
+            "auteur_id": { "type": "ObjectId", "description": "Référence vers authors._id." },
+            "nom": { "type": "string", "description": "Nom de l'auteur, dupliqué pour éviter une jointure systématique." }
+          }
+        },
+        "date_publication": { "type": "date", "description": "Date de première publication du livre." },
+        "tags": { "type": "array<string>", "description": "Mots-clés thématiques. Peut être vide." },
+        "resume": { "type": "string", "description": "Résumé du livre, de longueur variable." },
+        "disponible": { "type": "boolean", "description": "Indique si un exemplaire est actuellement disponible à l'emprunt." }
+      },
+      "example": {
+        "_id": "665f1a2b3c4d5e6f7a8b9c10",
+        "titre": "1984",
+        "auteurs": [
+          { "auteur_id": "665f1a2b3c4d5e6f7a8b9c01", "nom": "George Orwell" }
+        ],
+        "date_publication": "1949-06-08T00:00:00Z",
+        "tags": ["Dystopie", "Science-fiction", "Politique"],
+        "resume": "Dans un monde totalitaire sous surveillance permanente, Winston Smith tente de préserver sa liberté de pensée face au régime de Big Brother.",
+        "disponible": true
+      }
+    },
+
+    "users": {
+      "description": "Un document par utilisateur emprunteur. Collection nécessaire pour que les emprunts puissent référencer un emprunteur identifiable, indépendamment des livres.",
+      "fields": {
+        "_id": { "type": "ObjectId", "description": "Identifiant unique généré par MongoDB." },
+        "nom": { "type": "string", "description": "Nom complet de l'utilisateur." },
+        "email": { "type": "string", "description": "Adresse e-mail de l'utilisateur." }
+      },
+      "example": {
+        "_id": "665f1a2b3c4d5e6f7a8b9c20",
+        "nom": "Amadou Diallo",
+        "email": "amadou.diallo@example.com"
+      }
+    },
+
+    "loans": {
+      "description": "Un document par emprunt. Le livre et l'utilisateur sont référencés par leur ObjectId (référencement pur, non embarqué) : les emprunts sont des événements nombreux et fréquents, sans intérêt à dupliquer les informations complètes du livre ou de l'utilisateur à chaque emprunt.",
+      "fields": {
+        "_id": { "type": "ObjectId", "description": "Identifiant unique généré par MongoDB." },
+        "utilisateur_id": { "type": "ObjectId", "description": "Référence vers users._id." },
+        "livre_id": { "type": "ObjectId", "description": "Référence vers books._id." },
+        "date_emprunt": { "type": "date", "description": "Date de début de l'emprunt." },
+        "date_retour_prevue": { "type": "date", "description": "Date à laquelle le livre doit être rendu." },
+        "date_retour": { "type": "date | null", "description": "Date effective de retour. null si le livre n'a pas encore été rendu." },
+        "statut": { "type": "string", "description": "Statut textuel de l'emprunt : 'en_cours' ou 'rendu'." }
+      },
+      "example": {
+        "_id": "665f1a2b3c4d5e6f7a8b9c30",
+        "utilisateur_id": "665f1a2b3c4d5e6f7a8b9c20",
+        "livre_id": "665f1a2b3c4d5e6f7a8b9c10",
+        "date_emprunt": "2026-08-22T00:00:00Z",
+        "date_retour_prevue": "2026-09-01T00:00:00Z",
+        "date_retour": null,
+        "statut": "en_cours"
+      }
+    }
+  },
+
+  "indexes": {
+    "books": [
+      { "name": "idx_titre", "keys": { "titre": 1 }, "purpose": "Accélère la recherche et le tri par titre." },
+      { "name": "idx_disponible_date_publication", "keys": { "disponible": 1, "date_publication": -1 }, "purpose": "Accélère l'affichage des livres disponibles triés par date de publication décroissante." }
+    ]
+  }
+}

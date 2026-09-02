@@ -1,0 +1,23 @@
+# Variables d'environnement (contient les identifiants MongoDB Atlas)
+.env
+
+# Environnement virtuel Python
+.venv/
+venv/
+env/
+
+# Fichiers Python compilés
+__pycache__/
+*.pyc
+*.pyo
+
+# Fichiers de configuration d'IDE
+.vscode/
+.idea/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
