@@ -219,9 +219,4 @@ le nom de l'emprunteur et un indicateur de retard calculé par rapport
   filtrer **et** trier directement via l'index, sans tri en mémoire
   supplémentaire.
 
-## Auteur
 
-Nom : [À compléter]
-Formation : [À compléter]
-Établissement : [À compléter]
-Année universitaire : [À compléter]
